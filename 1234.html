@@ -48,8 +48,8 @@ html,body{margin:0;padding:0}
 
 /* === Popover (long card) === */
 .stl .product-popover{
-  position:absolute; left:calc(38% + 26px); top:62%; transform:translateY(-50%);
-  width:380px; max-width:min(94vw,380px);
+  position:absolute; left:calc(38% + 35px); top:62%; transform:translateY(-50%);
+  width:420px; max-width:min(94vw,420px);
   background:var(--card-bg); color:var(--ink); border-radius:0px; box-shadow:var(--shadow);
   padding:20px 24px; opacity:0; pointer-events:none;
   transition:opacity var(--anim) ease, transform var(--anim) ease;
@@ -60,20 +60,20 @@ html,body{margin:0;padding:0}
 /* Triangle pointer (flush) */
 .stl .tip{
   position:absolute; left:-1px; top:50%; transform:translate(-100%,-50%);
-  width:0; height:0; border-style:solid; border-width:10px;
+  width:0; height:0; border-style:solid; border-width:8px;
   border-color:transparent var(--card-bg) transparent transparent;
   filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.06)); pointer-events:auto; z-index:1;
 }
 
 /* Card layout */
 .stl .card{display:grid; grid-template-columns:80px 1fr; gap:16px; align-items:center}
-.stl .card img{width:80px; height:80px; object-fit:cover; border-radius:6px}
+.stl .card img{width:80px; height:80px; object-fit:cover; border-radius:0px}
 .stl .title{margin:0 0 8px; font:500 15px/1.35 Rubik,system-ui,sans-serif; color:var(--ink)}
 .stl .title a{color:inherit; text-decoration:none}
 .stl .title a:hover{text-decoration:underline}
 .stl .meta{display:flex; gap:16px; align-items:center}
 .stl .price{font:600 15px/1 Rubik,system-ui,sans-serif; color:var(--ink)}
-.stl .qv{font:500 15px/1 Rubik,system-ui,sans-serif; color:#282828B3; text-decoration:underline; background:none; border:0; padding:0; cursor:default}
+.stl .qv{font:500 15px/1 Rubik,system-ui,sans-serif; color:#282828B3; text-decoration:underline; background:none; border:0; padding:0; cursor:default; pointer-events:none}
 
 /* Focus */
 .stl :focus-visible{outline:2px solid #3b82f6; outline-offset:2px}
