@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shop-the-Look — Donut Hotspot (18→24 outer, 12 inner)</title>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== Base ===== */
+html,body{margin:0;padding:0}
+.stl{
+  --outer:18px;           /* inactive outer diameter */
+  --inner:12px;           /* constant inner diameter (hole) */
+  --z-ui:50; --g:16px; --anim:220ms;
+  --shadow:0 10px 30px rgba(0,0,0,.22);
+  --card-bg:#fff; --ink:#282828;
+  font-family:Rubik,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+.stl *{box-sizing:border-box}
+.stl .wrap{width:100%}
+.stl .stage{position:relative;overflow:hidden}
+.stl .stage>img{display:block;width:100%;height:auto}
+
+/* ===== Donut hotspot (no border; pure ring) =====
+   Box size tracks --outer so click target = visual size. */
+.stl .dot{
+  position:absolute; left:38%; top:62%; transform:translate(-50%,-50%);
+  width:var(--outer); height:var(--outer); border:0; border-radius:50%; cursor:pointer;
+  background:
+    radial-gradient(circle,
+      transparent calc((var(--inner) / 2) - 0.01px),
+      #fff calc((var(--inner) / 2)),
+      #fff calc((var(--outer) / 2)),
+      transparent calc((var(--outer) / 2)));
+  transition:
+    width var(--anim) ease,
+    height var(--anim) ease,
+    background var(--anim) ease,
+    filter .18s ease;
+  z-index:calc(var(--z-ui)+3);
+}
+/* Active: outer grows to 24px (inner stays 12px) for thicker ring */
+.stl .dot[aria-pressed="true"]{ --outer:24px; }
+
+/* === Popover (long card) === */
+.stl .product-popover{
+  position:absolute; left:calc(38% + 26px); top:62%; transform:translateY(-50%);
+  width:380px; max-width:min(94vw,380px);
+  background:var(--card-bg); color:var(--ink); border-radius:0px; box-shadow:var(--shadow);
+  padding:20px 24px; opacity:0; pointer-events:none;
+  transition:opacity var(--anim) ease, transform var(--anim) ease;
+  z-index:calc(var(--z-ui)+2);
+}
+.stl .product-popover[open]{ opacity:1; pointer-events:auto; transform:translateY(-50%) translateX(0) }
+
+/* Triangle pointer (flush) */
+.stl .tip{
+  position:absolute; left:-1px; top:50%; transform:translate(-100%,-50%);
+  width:0; height:0; border-style:solid; border-width:10px;
+  border-color:transparent var(--card-bg) transparent transparent;
+  filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.06)); pointer-events:auto; z-index:1;
+}
+
+/* Card layout */
+.stl .card{display:grid; grid-template-columns:80px 1fr; gap:16px; align-items:center}
+.stl .card img{width:80px; height:80px; object-fit:cover; border-radius:6px}
+.stl .title{margin:0 0 8px; font:500 15px/1.35 Rubik,system-ui,sans-serif; color:var(--ink)}
+.stl .title a{color:inherit; text-decoration:none}
+.stl .title a:hover{text-decoration:underline}
+.stl .meta{display:flex; gap:16px; align-items:center}
+.stl .price{font:600 15px/1 Rubik,system-ui,sans-serif; color:var(--ink)}
+.stl .qv{font:500 15px/1 Rubik,system-ui,sans-serif; color:#282828B3; text-decoration:underline; background:none; border:0; padding:0; cursor:default}
+
+/* Focus */
+.stl :focus-visible{outline:2px solid #3b82f6; outline-offset:2px}
+
+/* SR helper */
+.stl .visually-hidden{position:absolute!important; clip:rect(1px,1px,1px,1px); padding:0!important; border:0!important; height:1px!important; width:1px!important; overflow:hidden; white-space:nowrap}
+</style>
+</head>
+<body>
+
+<section class="stl" aria-label="Shop the look">
+  <div class="wrap">
+    <div class="stage" aria-describedby="scene-desc">
+      <p id="scene-desc" class="visually-hidden">Full-width image with a donut hotspot; popover opens on toggle.</p>
+
+      <!-- Full-width image defines section height -->
+      <img
+        src="https://focal-theme-carbon.myshopify.com/cdn/shop/files/look2-desktop.jpg?v=1630493285&width=2000"
+        srcset="
+          https://focal-theme-carbon.myshopify.com/cdn/shop/files/look2-desktop.jpg?v=1630493285&width=1200 1200w,
+          https://focal-theme-carbon.myshopify.com/cdn/shop/files/look2-desktop.jpg?v=1630493285&width=1600 1600w,
+          https://focal-theme-carbon.myshopify.com/cdn/shop/files/look2-desktop.jpg?v=1630493285&width=2000 2000w,
+          https://focal-theme-carbon.myshopify.com/cdn/shop/files/look2-desktop.jpg?v=1630493285&width=2400 2400w"
+        sizes="100vw"
+        alt="Styled interior with featured products"
+        loading="eager"
+        width="2000" height="1067" />
+
+      <!-- Donut Hotspot (18→24 outer, 12 inner) -->
+      <button type="button" class="dot tap-area"
+        aria-controls="stl-popover"
+        aria-expanded="false"
+        aria-pressed="false"
+        aria-label="Show product"></button>
+
+      <!-- Popover -->
+      <div id="stl-popover" class="product-popover" role="dialog" aria-modal="false" aria-label="Product quick view" hidden>
+        <div class="tip" aria-hidden="true"></div>
+        <div class="card">
+          <img src="https://focal-theme-carbon.myshopify.com/cdn/shop/products/image01_89275892-b7fb-4624-8133-fda5fc4ed7fa.jpg?v=1630501301&width=216" alt="" width="80" height="80" loading="lazy">
+          <div class="meta-col">
+            <h3 class="title"><a href="/products/drop-classic-leather-wireless-charger">Drop Classic Leather Wireless Charger</a></h3>
+            <div class="meta">
+              <div class="price">$59.99</div>
+              <button type="button" class="qv" aria-disabled="true" title="Not available">Quick view</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+/* Toggle donut thickness + popover; outside click/ESC close; clamps stay intact */
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const scope = $('.stl'); if (!scope) return;
+
+  const stage = $('.stage', scope);
+  const img   = $('img', stage);
+  const dot   = $('.dot', scope);
+  const pop   = $('#stl-popover', scope);
+  const tip   = $('.tip', pop);
+
+  const show = el => { el.hidden = false; requestAnimationFrame(() => el.setAttribute('open','')); };
+  const hide = el => { el.removeAttribute('open'); el.addEventListener('transitionend',()=>{ el.hidden = true; },{once:true}); };
+
+  const openPop = () => { show(pop); dot.setAttribute('aria-expanded','true'); dot.setAttribute('aria-pressed','true'); requestAnimationFrame(clamp); };
+  const closePop = () => { hide(pop); dot.setAttribute('aria-expanded','false'); dot.setAttribute('aria-pressed','false'); };
+
+  const toggle = e => {
+    e.stopPropagation();
+    pop.hasAttribute('open') ? closePop() : openPop();
+  };
+  const keyToggle = e => {
+    if (e.key!=='Enter' && e.key!==' ') return;
+    e.preventDefault(); toggle(e);
+  };
+
+  dot.addEventListener('pointerdown', toggle);
+  dot.addEventListener('keydown', keyToggle);
+
+  pop.addEventListener('pointerdown', e => e.stopPropagation());
+  tip.addEventListener('pointerdown', e => e.stopPropagation());
+
+  document.addEventListener('pointerdown', e => {
+    if (!pop.hasAttribute('open')) return;
+    const path = e.composedPath ? e.composedPath() : [];
+    if (!path.includes(pop) && !path.includes(dot)) closePop();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key==='Escape' && pop.hasAttribute('open')) closePop();
+  });
+
+  // Keep popover within viewport X and image Y
+  const clamp = () => {
+    if (pop.hidden) return;
+    const r = pop.getBoundingClientRect();
+    const sr = stage.getBoundingClientRect();
+    const dx = Math.max(12 - r.left, 0) + Math.max((r.right + 12) - innerWidth, 0);
+    let ty = 0;
+    if (r.top < sr.top + 8) ty = (sr.top + 8) - r.top;
+    else if (r.bottom > sr.bottom - 8) ty = (sr.bottom - 8) - r.bottom;
+    pop.style.transform = `translateY(-50%) translateX(${dx ? -dx : 0}px)` + (ty ? ` translateY(${ty}px)` : '');
+  };
+  new ResizeObserver(clamp).observe(img);
+  addEventListener('resize', clamp);
+  new MutationObserver(clamp).observe(pop, {attributes:true, attributeFilter:['open','hidden','style']});
+})();
+</script>
+</body>
+</html>
