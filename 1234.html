@@ -21,9 +21,12 @@ html,body{margin:0;padding:0}
   font-family:Rubik,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
 .stl *{box-sizing:border-box}
-.stl .wrap{width:100%}
-.stl .stage{position:relative;overflow:hidden}
-.stl .stage>img{display:block;width:100%;height:auto}
+  .stl .wrap{
+    width:100vw;
+    margin-inline:calc(50% - 50vw);
+  }
+  .stl .stage{position:relative;overflow:hidden;width:100%}
+  .stl .stage>img{display:block;width:100%;height:auto}
 
 /* ===== Donut hotspot (no border; pure ring) =====
    Box size tracks --outer so click target = visual size. */
