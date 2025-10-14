@@ -24,6 +24,54 @@ html,body{margin:0;padding:0}
 .stl .wrap{width:100%}
 .stl .stage{position:relative;overflow:hidden}
 .stl .stage>img{display:block;width:100%;height:auto}
+.stl .stl-nav{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:calc(var(--z-ui) + 1);
+  background:#fff;
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:8px;
+  align-items:center;
+  text-align:center;
+  width:100%;
+  max-width:280px;
+  border-radius:0;
+}
+.stl .stl-nav__label{
+  grid-column:1 / -1;
+  font:600 12px/1.25 Rubik,system-ui,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--ink);
+}
+.stl .stl-nav__btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:36px;
+  border:1px solid rgba(40,40,40,0.18);
+  background:#fff;
+  color:var(--ink);
+  font:500 14px/1 Rubik,system-ui,sans-serif;
+  cursor:pointer;
+  border-radius:0;
+  padding:0;
+  transition:background-color .2s ease,color .2s ease;
+}
+.stl .stl-nav__btn:hover,
+.stl .stl-nav__btn:focus-visible{
+  background-color:rgba(40,40,40,0.06);
+}
+.stl .stl-nav__counter{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:500 14px/1 Rubik,system-ui,sans-serif;
+  color:var(--ink);
+}
 
 /* ===== Donut hotspot (no border; pure ring) =====
    Box size tracks --outer so click target = visual size. */
@@ -121,6 +169,13 @@ html,body{margin:0;padding:0}
         alt="Styled interior with featured products"
         loading="eager"
         width="2000" height="1067" />
+
+      <div class="stl-nav" role="group" aria-label="Look navigation" data-total="2">
+        <span class="stl-nav__label">DEFINE YOUR STYLE</span>
+        <button type="button" class="stl-nav__btn stl-nav__btn--prev" data-action="prev" aria-label="Previous look">&#8592;</button>
+        <span class="stl-nav__counter" aria-live="polite">1 / 2</span>
+        <button type="button" class="stl-nav__btn stl-nav__btn--next" data-action="next" aria-label="Next look">&#8594;</button>
+      </div>
 
       <!-- Donut Hotspot (18→24 outer, 12 inner) -->
       <button id="stl-dot-1" type="button" class="dot tap-area"
@@ -348,6 +403,39 @@ html,body{margin:0;padding:0}
   registry.forEach(({popover}) => {
     new MutationObserver(clampActive).observe(popover, {attributes:true, attributeFilter:['open','hidden','style']});
   });
+})();
+</script>
+
+<script>
+/* Independent nav slider (keeps hotspot system untouched) */
+(() => {
+  const nav = document.querySelector('.stl-nav');
+  if (!nav) return;
+
+  const prev = nav.querySelector('[data-action="prev"]');
+  const next = nav.querySelector('[data-action="next"]');
+  const counter = nav.querySelector('.stl-nav__counter');
+  const total = parseInt(nav.dataset.total || '2', 10) || 1;
+
+  if (!prev || !next || !counter || total < 1) return;
+
+  let index = 0;
+
+  const updateCounter = () => {
+    counter.textContent = `${index + 1} / ${total}`;
+  };
+
+  prev.addEventListener('click', () => {
+    index = (index - 1 + total) % total;
+    updateCounter();
+  });
+
+  next.addEventListener('click', () => {
+    index = (index + 1) % total;
+    updateCounter();
+  });
+
+  updateCounter();
 })();
 </script>
 </body>
