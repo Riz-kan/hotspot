@@ -65,6 +65,12 @@ html,body{margin:0;padding:0}
 .stl .stl-nav__btn:focus-visible{
   background-color:rgba(40,40,40,0.06);
 }
+.stl .stl-nav__icon{
+  width:20px;
+  height:20px;
+  display:block;
+  fill:currentColor;
+}
 .stl .stl-nav__counter{
   display:flex;
   align-items:center;
@@ -172,9 +178,17 @@ html,body{margin:0;padding:0}
 
       <div class="stl-nav" role="group" aria-label="Look navigation" data-total="2">
         <span class="stl-nav__label">DEFINE YOUR STYLE</span>
-        <button type="button" class="stl-nav__btn stl-nav__btn--prev" data-action="prev" aria-label="Previous look">&#8592;</button>
+        <button type="button" class="stl-nav__btn stl-nav__btn--prev" data-action="prev" aria-label="Previous look">
+          <svg class="stl-nav__icon" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+            <path d="M14.7 5.3a1 1 0 0 1 0 1.4L10.42 11H19a1 1 0 1 1 0 2h-8.58l4.28 4.3a1 1 0 1 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0z" />
+          </svg>
+        </button>
         <span class="stl-nav__counter" aria-live="polite">1 / 2</span>
-        <button type="button" class="stl-nav__btn stl-nav__btn--next" data-action="next" aria-label="Next look">&#8594;</button>
+        <button type="button" class="stl-nav__btn stl-nav__btn--next" data-action="next" aria-label="Next look">
+          <svg class="stl-nav__icon" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+            <path d="M9.3 5.3a1 1 0 0 1 1.4 0l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 0 1-1.4-1.4L13.58 13H5a1 1 0 1 1 0-2h8.58L9.3 6.7a1 1 0 0 1 0-1.4z" />
+          </svg>
+        </button>
       </div>
 
       <!-- Donut Hotspot (18→24 outer, 12 inner) -->
