@@ -28,7 +28,7 @@ html,body{margin:0;padding:0}
 /* ===== Donut hotspot (no border; pure ring) =====
    Box size tracks --outer so click target = visual size. */
 .stl .dot{
-  position:absolute; left:38%; top:62%; transform:translate(-50%,-50%);
+  position:absolute; transform:translate(-50%,-50%);
   width:var(--outer); height:var(--outer); border:0; border-radius:50%; cursor:pointer;
   background:
     radial-gradient(circle,
@@ -48,32 +48,52 @@ html,body{margin:0;padding:0}
 
 /* === Popover (long card) === */
 .stl .product-popover{
-  position:absolute; left:calc(38% + 26px); top:62%; transform:translateY(-50%);
-  width:380px; max-width:min(94vw,380px);
+  --base-x:0%;
+  --base-y:-50%;
+  --shift-x:0px;
+  --shift-y:0px;
+  position:absolute; transform:translate(var(--base-x), var(--base-y)) translateX(var(--shift-x)) translateY(var(--shift-y));
+  width:420px; max-width:min(94vw,420px);
   background:var(--card-bg); color:var(--ink); border-radius:0px; box-shadow:var(--shadow);
   padding:20px 24px; opacity:0; pointer-events:none;
   transition:opacity var(--anim) ease, transform var(--anim) ease;
   z-index:calc(var(--z-ui)+2);
 }
-.stl .product-popover[open]{ opacity:1; pointer-events:auto; transform:translateY(-50%) translateX(0) }
+.stl .product-popover[open]{ opacity:1; pointer-events:auto; }
 
 /* Triangle pointer (flush) */
-.stl .tip{
-  position:absolute; left:-1px; top:50%; transform:translate(-100%,-50%);
-  width:0; height:0; border-style:solid; border-width:10px;
+.stl .product-popover .tip{
+  position:absolute; top:50%;
+  width:0; height:0; border-style:solid; border-width:8px;
+  pointer-events:auto; z-index:1;
+}
+.stl .product-popover.is-right .tip{
+  left:-1px; transform:translate(-100%,-50%);
   border-color:transparent var(--card-bg) transparent transparent;
-  filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.06)); pointer-events:auto; z-index:1;
+  filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.06));
+}
+.stl .product-popover.is-left .tip{
+  right:-1px; transform:translate(100%,-50%);
+  border-color:transparent transparent transparent var(--card-bg);
+  filter:drop-shadow(1px 2px 2px rgba(0,0,0,.06));
+}
+
+.stl .product-popover:not(.is-left):not(.is-right) .tip{
+  left:-1px; transform:translate(-100%,-50%);
+  width:0; height:0; border-style:solid; border-width:8px;
+  border-color:transparent var(--card-bg) transparent transparent;
+  filter:drop-shadow(-1px 2px 2px rgba(0,0,0,.06));
 }
 
 /* Card layout */
 .stl .card{display:grid; grid-template-columns:80px 1fr; gap:16px; align-items:center}
-.stl .card img{width:80px; height:80px; object-fit:cover; border-radius:6px}
+.stl .card img{width:80px; height:80px; object-fit:cover; border-radius:0px}
 .stl .title{margin:0 0 8px; font:500 15px/1.35 Rubik,system-ui,sans-serif; color:var(--ink)}
 .stl .title a{color:inherit; text-decoration:none}
 .stl .title a:hover{text-decoration:underline}
 .stl .meta{display:flex; gap:16px; align-items:center}
 .stl .price{font:600 15px/1 Rubik,system-ui,sans-serif; color:var(--ink)}
-.stl .qv{font:500 15px/1 Rubik,system-ui,sans-serif; color:#282828B3; text-decoration:underline; background:none; border:0; padding:0; cursor:default}
+.stl .qv{font:500 15px/1 Rubik,system-ui,sans-serif; color:#282828B3; text-decoration:underline; background:none; border:0; padding:0; cursor:default; pointer-events:none}
 
 /* Focus */
 .stl :focus-visible{outline:2px solid #3b82f6; outline-offset:2px}
@@ -103,14 +123,32 @@ html,body{margin:0;padding:0}
         width="2000" height="1067" />
 
       <!-- Donut Hotspot (18→24 outer, 12 inner) -->
-      <button type="button" class="dot tap-area"
-        aria-controls="stl-popover"
+      <button id="stl-dot-1" type="button" class="dot tap-area"
+        style="left:38%; top:62%"
+        data-side="right"
+        aria-controls="#stl-popover-1"
         aria-expanded="false"
         aria-pressed="false"
-        aria-label="Show product"></button>
+        aria-label="Show Drop Classic Leather Wireless Charger"></button>
 
-      <!-- Popover -->
-      <div id="stl-popover" class="product-popover" role="dialog" aria-modal="false" aria-label="Product quick view" hidden>
+      <button id="stl-dot-2" type="button" class="dot tap-area"
+        style="left:52%; top:45%"
+        data-side="left"
+        aria-controls="#stl-popover-2"
+        aria-expanded="false"
+        aria-pressed="false"
+        aria-label="Show AirPods Pro product"></button>
+
+      <button id="stl-dot-3" type="button" class="dot tap-area"
+        style="left:66%; top:30%"
+        data-side="left"
+        aria-controls="#stl-popover-3"
+        aria-expanded="false"
+        aria-pressed="false"
+        aria-label="Show AirPods product"></button>
+
+      <!-- Popovers -->
+      <div id="stl-popover-1" class="product-popover" role="dialog" aria-modal="false" aria-label="Product quick view — Drop Classic Leather Wireless Charger" hidden tabindex="-1">
         <div class="tip" aria-hidden="true"></div>
         <div class="card">
           <img src="https://focal-theme-carbon.myshopify.com/cdn/shop/products/image01_89275892-b7fb-4624-8133-fda5fc4ed7fa.jpg?v=1630501301&width=216" alt="" width="80" height="80" loading="lazy">
@@ -118,6 +156,34 @@ html,body{margin:0;padding:0}
             <h3 class="title"><a href="/products/drop-classic-leather-wireless-charger">Drop Classic Leather Wireless Charger</a></h3>
             <div class="meta">
               <div class="price">$59.99</div>
+              <button type="button" class="qv" aria-disabled="true" title="Not available">Quick view</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="stl-popover-2" class="product-popover" role="dialog" aria-modal="false" aria-label="Product quick view — AirPods Pro" hidden tabindex="-1">
+        <div class="tip" aria-hidden="true"></div>
+        <div class="card">
+          <img src="https://focal-theme-carbon.myshopify.com/cdn/shop/files/0002_AirpodsPro_Case_Leather_Black_Front.jpg?v=1678982478&width=144" alt="" width="80" height="80" loading="lazy">
+          <div class="meta-col">
+            <h3 class="title"><a href="/products/leather-case-for-airpods-pro">Leather Case for AirPods Pro</a></h3>
+            <div class="meta">
+              <div class="price">$39.99</div>
+              <button type="button" class="qv" aria-disabled="true" title="Not available">Quick view</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="stl-popover-3" class="product-popover" role="dialog" aria-modal="false" aria-label="Product quick view — AirPods" hidden tabindex="-1">
+        <div class="tip" aria-hidden="true"></div>
+        <div class="card">
+          <img src="https://focal-theme-carbon.myshopify.com/cdn/shop/files/0010_AirpodsCase_Front_Brown_noshadow.jpg?v=1678982478&width=144" alt="" width="80" height="80" loading="lazy">
+          <div class="meta-col">
+            <h3 class="title"><a href="/products/leather-case-for-airpods">Leather Case for AirPods</a></h3>
+            <div class="meta">
+              <div class="price">$9.99</div>
               <button type="button" class="qv" aria-disabled="true" title="Not available">Quick view</button>
             </div>
           </div>
@@ -136,54 +202,152 @@ html,body{margin:0;padding:0}
 
   const stage = $('.stage', scope);
   const img   = $('img', stage);
-  const dot   = $('.dot', scope);
-  const pop   = $('#stl-popover', scope);
-  const tip   = $('.tip', pop);
+  const dots  = Array.from(scope.querySelectorAll('.dot'));
+  const gap   = 35;
+
+  const registry = dots.map(dot => {
+    const controls = dot.getAttribute('aria-controls') || '';
+    const target = controls ? scope.querySelector(controls) : null;
+    if (!target) return null;
+    const tip = target.querySelector('.tip');
+    return {
+      dot,
+      popover: target,
+      tip,
+      side: dot.dataset.side === 'left' ? 'left' : 'right'
+    };
+  }).filter(Boolean);
+
+  if (!registry.length) return;
 
   const show = el => { el.hidden = false; requestAnimationFrame(() => el.setAttribute('open','')); };
   const hide = el => { el.removeAttribute('open'); el.addEventListener('transitionend',()=>{ el.hidden = true; },{once:true}); };
 
-  const openPop = () => { show(pop); dot.setAttribute('aria-expanded','true'); dot.setAttribute('aria-pressed','true'); requestAnimationFrame(clamp); };
-  const closePop = () => { hide(pop); dot.setAttribute('aria-expanded','false'); dot.setAttribute('aria-pressed','false'); };
+  let activeEntry = null;
 
-  const toggle = e => {
-    e.stopPropagation();
-    pop.hasAttribute('open') ? closePop() : openPop();
+  const setPopoverSide = (popover, side) => {
+    popover.classList.toggle('is-left', side === 'left');
+    popover.classList.toggle('is-right', side !== 'left');
+    popover.style.setProperty('--base-x', side === 'left' ? '-100%' : '0%');
+    popover.style.setProperty('--base-y', '-50%');
+    popover.style.setProperty('--shift-x', '0px');
+    popover.style.setProperty('--shift-y', '0px');
   };
-  const keyToggle = e => {
-    if (e.key!=='Enter' && e.key!==' ') return;
-    e.preventDefault(); toggle(e);
+
+  const positionPopover = entry => {
+    const {dot, popover, side} = entry;
+    const stageRect = stage.getBoundingClientRect();
+    const dotRect = dot.getBoundingClientRect();
+    const centerX = dotRect.left + (dotRect.width / 2) - stageRect.left;
+    const centerY = dotRect.top + (dotRect.height / 2) - stageRect.top;
+
+    const anchorX = centerX + (side === 'left' ? -gap : gap);
+    popover.style.left = `${anchorX}px`;
+    popover.style.top = `${centerY}px`;
+    setPopoverSide(popover, side);
   };
 
-  dot.addEventListener('pointerdown', toggle);
-  dot.addEventListener('keydown', keyToggle);
+  const focusPopover = popover => {
+    const focusable = popover.querySelector('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    const target = focusable || popover;
+    if (typeof target.focus === 'function') target.focus();
+  };
 
-  pop.addEventListener('pointerdown', e => e.stopPropagation());
-  tip.addEventListener('pointerdown', e => e.stopPropagation());
+  const clampActive = () => {
+    if (!activeEntry) return;
+    const {popover} = activeEntry;
+    if (popover.hidden) return;
+    const popRect = popover.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+
+    const minLeft = 12;
+    const maxRight = innerWidth - 12;
+    let shiftX = 0;
+    if (popRect.left < minLeft) shiftX = minLeft - popRect.left;
+    else if (popRect.right > maxRight) shiftX = maxRight - popRect.right;
+
+    let shiftY = 0;
+    const topLimit = stageRect.top + 8;
+    const bottomLimit = stageRect.bottom - 8;
+    if (popRect.top < topLimit) shiftY = topLimit - popRect.top;
+    else if (popRect.bottom > bottomLimit) shiftY = bottomLimit - popRect.bottom;
+
+    popover.style.setProperty('--shift-x', `${shiftX}px`);
+    popover.style.setProperty('--shift-y', `${shiftY}px`);
+  };
+
+  const closeActive = ({focusReturn = true} = {}) => {
+    if (!activeEntry) return;
+    const {dot, popover} = activeEntry;
+    hide(popover);
+    dot.setAttribute('aria-expanded','false');
+    dot.setAttribute('aria-pressed','false');
+    popover.classList.remove('is-left','is-right');
+    popover.style.setProperty('--shift-x','0px');
+    popover.style.setProperty('--shift-y','0px');
+    if (focusReturn && typeof dot.focus === 'function') dot.focus();
+    activeEntry = null;
+  };
+
+  const openEntry = entry => {
+    if (activeEntry === entry) return;
+    closeActive({focusReturn:false});
+    const {dot, popover} = entry;
+    positionPopover(entry);
+    show(popover);
+    dot.setAttribute('aria-expanded','true');
+    dot.setAttribute('aria-pressed','true');
+    activeEntry = entry;
+    requestAnimationFrame(() => {
+      clampActive();
+      focusPopover(popover);
+    });
+  };
+
+  const toggleEntry = entry => {
+    if (activeEntry === entry) {
+      closeActive();
+    } else {
+      openEntry(entry);
+    }
+  };
+
+  const handleKeyToggle = entry => e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    toggleEntry(entry);
+  };
+
+  registry.forEach(entry => {
+    const {dot, popover, tip} = entry;
+    dot.addEventListener('pointerdown', e => { e.stopPropagation(); toggleEntry(entry); });
+    dot.addEventListener('keydown', handleKeyToggle(entry));
+    popover.addEventListener('pointerdown', e => e.stopPropagation());
+    if (tip) tip.addEventListener('pointerdown', e => e.stopPropagation());
+  });
 
   document.addEventListener('pointerdown', e => {
-    if (!pop.hasAttribute('open')) return;
+    if (!activeEntry) return;
     const path = e.composedPath ? e.composedPath() : [];
-    if (!path.includes(pop) && !path.includes(dot)) closePop();
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key==='Escape' && pop.hasAttribute('open')) closePop();
+    const {dot, popover} = activeEntry;
+    if (!path.includes(popover) && !path.includes(dot)) closeActive();
   });
 
-  // Keep popover within viewport X and image Y
-  const clamp = () => {
-    if (pop.hidden) return;
-    const r = pop.getBoundingClientRect();
-    const sr = stage.getBoundingClientRect();
-    const dx = Math.max(12 - r.left, 0) + Math.max((r.right + 12) - innerWidth, 0);
-    let ty = 0;
-    if (r.top < sr.top + 8) ty = (sr.top + 8) - r.top;
-    else if (r.bottom > sr.bottom - 8) ty = (sr.bottom - 8) - r.bottom;
-    pop.style.transform = `translateY(-50%) translateX(${dx ? -dx : 0}px)` + (ty ? ` translateY(${ty}px)` : '');
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && activeEntry) closeActive();
+  });
+
+  const clampAndPositionActive = () => {
+    if (!activeEntry) return;
+    positionPopover(activeEntry);
+    clampActive();
   };
-  new ResizeObserver(clamp).observe(img);
-  addEventListener('resize', clamp);
-  new MutationObserver(clamp).observe(pop, {attributes:true, attributeFilter:['open','hidden','style']});
+
+  new ResizeObserver(() => clampAndPositionActive()).observe(img);
+  addEventListener('resize', clampAndPositionActive);
+  registry.forEach(({popover}) => {
+    new MutationObserver(clampActive).observe(popover, {attributes:true, attributeFilter:['open','hidden','style']});
+  });
 })();
 </script>
 </body>
