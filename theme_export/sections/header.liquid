@@ -294,6 +294,9 @@
     /* used to apply transparency to .header__row, will only ever be transparent or unset */
     --header-bg-color: transparent;
 
+    /* shared timing so color transitions align with menu animations */
+    --header-color-transition: var(--animation-values-fast);
+
     /* used to display the appropriate logo based on transparency state */
     --header-logo-display: none;
     --header-logo-inverse-display: block;
@@ -324,16 +327,14 @@
       --color-border-rgb: inherit;
 
       .header__row {
-        /* Faster transition for "in" animation */
-        transition: color var(--animation-values-fast), border-color var(--animation-values-fast),
-          background-color var(--animation-values-fast);
+        transition: color var(--header-color-transition), border-color var(--header-color-transition),
+          background-color var(--header-color-transition);
       }
     }
 
     .header__row {
-      /* Slower transition for "out" animation */
-      transition: color var(--animation-values-slow), border-color var(--animation-values-slow),
-        background-color var(--animation-values-slow);
+      transition: color var(--header-color-transition), border-color var(--header-color-transition),
+        background-color var(--header-color-transition);
     }
   }
 
