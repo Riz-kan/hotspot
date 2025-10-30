@@ -3,7 +3,7 @@ import { debounce, onDocumentLoaded } from '@theme/utilities';
 import { MegaMenuHoverEvent } from '@theme/events';
 
 const ACTIVATE_DELAY = 0;
-const DEACTIVATE_DELAY = 350;
+const DEACTIVATE_DELAY = 150;
 
 /**
  * A custom element that manages a header menu.
@@ -162,7 +162,7 @@ class HeaderMenu extends Component {
 
     setTimeout(() => {
       item.removeAttribute('data-animating');
-    }, Math.max(0, this.animationDelay - 150)); // Start header transition 150ms before submenu finishes
+    }, Math.max(0, this.animationDelay - 50)); // Start header transition near the end of the submenu animation
   };
 
   /**
